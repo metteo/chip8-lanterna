@@ -1,0 +1,32 @@
+name: chip8-lanterna
+
+on: [push]
+
+jobs:
+  verify:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # temporary checkout and build of core dependency
+      - name: git core
+        uses: actions/checkout@v2
+        with:
+          path: core
+          repository: metteo/chip8-core
+          token: ${{ secrets.GitHub_PAT }}
+
+      - name: maven core
+        uses: "xlui/action-maven-cli/jdk11@master"
+        with:
+          args: -B -Dmaven.repo.local=$PWD/repo clean install --file core/pom.xml
+
+      - name: git lanterna
+        uses: actions/checkout@v2
+        with:
+          path: lanterna
+
+      - name: maven lanterna
+        uses: "xlui/action-maven-cli/jdk11@master"
+        with:
+          args: -B -Dmaven.repo.local=$PWD/repo clean verify --file lanterna/pom.xml
