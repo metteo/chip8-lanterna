@@ -1,19 +1,22 @@
 package net.novaware.chip8.lanterna;
 
-import net.novaware.chip8.lanterna.device.*;
 import net.novaware.chip8.core.Board;
+import net.novaware.chip8.lanterna.device.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.file.Path;
 
-import static java.lang.System.err;
 import static java.lang.System.exit;
 import static net.novaware.chip8.core.BoardFactory.newBoardFactory;
 
 public class Chip8 {
 
+    private static final Logger LOG = LogManager.getLogger();
+
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
-            err.println("usage: chip8 <pathToRom>");
+            LOG.error("usage: chip8 <pathToRom>");
             exit(1);
         }
 
