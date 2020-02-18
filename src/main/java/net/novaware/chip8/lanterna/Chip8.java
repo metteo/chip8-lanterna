@@ -1,6 +1,7 @@
 package net.novaware.chip8.lanterna;
 
 import net.novaware.chip8.core.Board;
+import net.novaware.chip8.core.BoardConfig;
 import net.novaware.chip8.lanterna.device.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +22,8 @@ public class Chip8 {
         }
 
         final Path romPath = Path.of(args[0]);
+        final String title = romPath.getName(romPath.getNameCount() - 1).toString();
+
         Tape tape = new Tape(romPath);
         tape.load(); //TODO: temporary preload to verify paths early before lanterna clears the screen
 
@@ -31,7 +34,15 @@ public class Chip8 {
         Buzzer buzzer = new Buzzer(aCase.getTerminal());
         buzzer.init();
 
-        Board board = newBoardFactory().newBoard();
+        BoardConfig config = new BoardConfig();
+
+        // TODO: create a ROM library with game profiles instead
+        if (title.equals("INVADERS")) {
+            config.setCpuFrequency(1500);
+            config.setLegacyShift(false);
+        }
+
+        Board board = newBoardFactory(config).newBoard();
         board.init();
 
         board.getDisplayPort().attach(screen::draw);
