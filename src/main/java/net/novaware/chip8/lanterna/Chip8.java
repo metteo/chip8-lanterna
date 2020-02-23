@@ -52,7 +52,7 @@ public class Chip8 {
         Keyboard k = new Keyboard();
         k.init(board.getKeyPort(), aCase.getTerminal());
 
-        board.run(Integer.MAX_VALUE);
+        board.runOnScheduler(Integer.MAX_VALUE);
 
         /*
         Signal.handle(new Signal("WINCH"), sig -> {

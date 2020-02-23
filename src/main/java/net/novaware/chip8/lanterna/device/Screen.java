@@ -5,7 +5,7 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import net.novaware.chip8.core.cpu.register.Registers;
-import net.novaware.chip8.core.util.ViewPort;
+import net.novaware.chip8.core.gpu.ViewPort;
 
 import java.io.IOException;
 
