@@ -7,6 +7,7 @@ import net.novaware.chip8.lanterna.device.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Random;
 
@@ -45,15 +46,22 @@ public class Chip8 {
         }
 
         Board board = newBoardFactory(config, new ClockGeneratorJvmImpl("Lanterna"), new Random()::nextInt).newBoard();
-        board.init();
 
         board.getDisplayPort().attach(screen::draw);
         board.getAudioPort().attach(buzzer);
-        board.getStoragePort().load(tape.load());
+        board.getStoragePort().attachSource(() -> {
+            try {
+                return tape.load();
+            } catch (IOException e) {
+                LOG.error("Unable to load tape:" + e);
+                return new byte[0];
+            }
+        });
 
         Keyboard k = new Keyboard();
         k.init(board.getKeyPort(), aCase.getTerminal());
 
+        board.initialize();
         board.runOnScheduler(Integer.MAX_VALUE);
 
         /*

@@ -4,11 +4,11 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.TerminalScreen;
-import net.novaware.chip8.core.cpu.register.Registers;
 import net.novaware.chip8.core.gpu.ViewPort;
 
 import java.io.IOException;
 
+import static net.novaware.chip8.core.port.DisplayPort.*;
 import static net.novaware.chip8.core.util.UnsignedUtil.uint;
 
 /**
@@ -19,7 +19,7 @@ public class Screen {
     private boolean[][] model = new boolean[32][64]; // [y][x]
 
     private static final boolean REDRAW_HEURISTIC = !false;
-    private Integer lastChange = uint(Registers.GC_DRAW);
+    private Integer lastChange = GC_DRAW;
 
     private TerminalScreen terminalScreen;
 
@@ -48,7 +48,7 @@ public class Screen {
 
     public void draw(Integer currentChange, byte[] data) {
         if (REDRAW_HEURISTIC) {
-            if ((lastChange != uint(Registers.GC_ERASE) && currentChange == uint(Registers.GC_ERASE)) || currentChange == uint(Registers.GC_MIX)) { //this works for games, above works nice for invaders menu screen
+            if ((lastChange != GC_ERASE && currentChange == GC_ERASE) || currentChange == GC_MIX) { //this works for games, above works nice for invaders menu screen
                 refresh();
             } else {
                 updateModel(data);
