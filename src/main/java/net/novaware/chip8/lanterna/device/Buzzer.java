@@ -1,6 +1,7 @@
 package net.novaware.chip8.lanterna.device;
 
 import com.googlecode.lanterna.terminal.Terminal;
+import net.novaware.chip8.core.port.AudioPort;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -8,7 +9,7 @@ import java.util.function.Consumer;
 /**
  * Sound device
  */
-public class Buzzer implements Consumer<Boolean> {
+public class Buzzer implements Consumer<AudioPort.Packet> {
 
     private final Terminal terminal;
 
@@ -33,8 +34,8 @@ public class Buzzer implements Consumer<Boolean> {
     }
 
     @Override
-    public void accept(Boolean buzz) {
-        if (buzz) {
+    public void accept(AudioPort.Packet buzz) {
+        if (buzz.isSoundOn()) {
             startBuzzing();
         } else {
             stopBuzzing();

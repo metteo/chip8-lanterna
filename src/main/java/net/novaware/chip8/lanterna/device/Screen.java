@@ -9,7 +9,6 @@ import net.novaware.chip8.core.gpu.ViewPort;
 import java.io.IOException;
 
 import static net.novaware.chip8.core.port.DisplayPort.*;
-import static net.novaware.chip8.core.util.UnsignedUtil.uint;
 
 /**
  * Display device
@@ -17,9 +16,6 @@ import static net.novaware.chip8.core.util.UnsignedUtil.uint;
 public class Screen {
 
     private boolean[][] model = new boolean[32][64]; // [y][x]
-
-    private static final boolean REDRAW_HEURISTIC = !false;
-    private Integer lastChange = GC_DRAW;
 
     private TerminalScreen terminalScreen;
 
@@ -42,23 +38,15 @@ public class Screen {
         tg.setForegroundColor(TextColor.ANSI.WHITE);
     }
 
-    public void setModelValue(int x, int y, boolean value) {
-        model[y][x] = value;
-    }
+    public void draw(Packet packet) {
 
-    public void draw(Integer currentChange, byte[] data) {
-        if (REDRAW_HEURISTIC) {
-            if ((lastChange != GC_ERASE && currentChange == GC_ERASE) || currentChange == GC_MIX) { //this works for games, above works nice for invaders menu screen
-                refresh();
-            } else {
-                updateModel(data);
+        for (int y = 0; y < packet.getRowCount(); ++y) {
+            for (int x = 0; x < packet.getColumnCount(); ++x) {
+                model[y][x] = packet.getPixel(x, y);
             }
-
-            lastChange = currentChange;
-        } else {
-            updateModel(data);
-            refresh();
         }
+
+        refresh();
     }
 
     public void refresh() {
@@ -94,26 +82,6 @@ public class Screen {
             terminalScreen.refresh();
         } catch (IOException e) {
             e.printStackTrace(); //TODO: handle exception
-        }
-    }
-    public static String padLeft(String s, int n) {
-        return String.format("%" + n + "s", s);
-    }
-
-    private void updateModel(byte[] data) {
-        for (int yCoord  = 0; yCoord < 32; ++yCoord) {
-            for (int xCoord  = 0; xCoord < 64; ++xCoord) {
-                bit.x = xCoord;
-                bit.y = yCoord;
-
-                viewPort.toIndex(bit, idx, false);
-
-                byte frame = data[idx.arrayByte];
-                int mask = 0x1 << 7 - idx.byteBit;
-                int pixel = (uint(frame) & mask) >>> 7 - idx.byteBit;
-
-                setModelValue(xCoord, yCoord, pixel != 0);
-            }
         }
     }
 }

@@ -3,6 +3,7 @@ package net.novaware.chip8.lanterna;
 import net.novaware.chip8.core.Board;
 import net.novaware.chip8.core.BoardConfig;
 import net.novaware.chip8.core.clock.ClockGeneratorJvmImpl;
+import net.novaware.chip8.core.port.DisplayPort;
 import net.novaware.chip8.lanterna.device.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,17 +39,20 @@ public class Chip8 {
         buzzer.init();
 
         BoardConfig config = new BoardConfig();
+        DisplayPort.Mode mode = DisplayPort.Mode.MERGE_FRAME;
 
         // TODO: create a ROM library with game profiles instead
         if (title.equals("INVADERS")) {
+            mode = DisplayPort.Mode.FALLING_EDGE;
             config.setCpuFrequency(1500);
             config.setLegacyShift(false);
         }
 
         Board board = newBoardFactory(config, new ClockGeneratorJvmImpl("Lanterna"), new Random()::nextInt).newBoard();
 
-        board.getDisplayPort().attach(screen::draw);
-        board.getAudioPort().attach(buzzer);
+        board.getDisplayPort(DisplayPort.Type.PRIMARY).connect(screen::draw);
+        board.getDisplayPort(DisplayPort.Type.PRIMARY).setMode(mode);
+        board.getAudioPort().connect(buzzer);
         board.getStoragePort().attachSource(() -> {
             try {
                 return tape.load();
