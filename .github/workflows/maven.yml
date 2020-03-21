@@ -16,17 +16,21 @@ jobs:
           repository: metteo/chip8-core
           token: ${{ secrets.GitHub_PAT }}
 
-      - name: maven core
-        uses: "xlui/action-maven-cli/jdk11@master"
-        with:
-          args: -B -Dmaven.repo.local=$PWD/repo clean install --file core/pom.xml
-
       - name: git lanterna
         uses: actions/checkout@v2
         with:
           path: lanterna
 
-      - name: maven lanterna
-        uses: "xlui/action-maven-cli/jdk11@master"
+      - name: java
+        uses: actions/setup-java@v1.3.0
         with:
-          args: -B -Dmaven.repo.local=$PWD/repo clean verify --file lanterna/pom.xml
+          java-version: '11.0.6+10'
+
+      - name: prepare maven
+        run: cp -R ./core/.mvn ./ ; cp ./core/mvnw ./
+
+      - name: maven core
+        run: ./mvnw -B -Dmaven.repo.local=$PWD/repo clean install --file core/pom.xml
+
+      - name: maven lanterna
+        run: ./mvnw -B -Dmaven.repo.local=$PWD/repo clean verify --file lanterna/pom.xml
