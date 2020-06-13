@@ -1,6 +1,6 @@
 # Chip8 Emulgator TE (Terminal Edition) PoC
 
-![Screenshot of the application](https://repository-images.githubusercontent.com/239994384/6ad99700-9601-11ea-81f2-ce7200aed5e0)
+![Screenshot of the application](https://repository-images.githubusercontent.com/239994665/0d13a880-ad81-11ea-9760-d381e39cda89)
 
 Chip8 Emulator / Interpreter / Virtual Machine written in Java 11 with Lanterna CLI as front-end
 
