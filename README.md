@@ -1,5 +1,7 @@
 # Chip8 Emulgator TE (Terminal Edition) PoC
 
+![chip8-lanterna](https://github.com/metteo/chip8-lanterna/workflows/chip8-lanterna/badge.svg) [![YouTube Video Likes](https://img.shields.io/youtube/likes/hvN-p5BxH4Y?style=social)](https://www.youtube.com/watch?v=hvN-p5BxH4Y)
+
 ![Screenshot of the application](https://repository-images.githubusercontent.com/239994665/0d13a880-ad81-11ea-9760-d381e39cda89)
 
 Chip8 Emulator / Interpreter / Virtual Machine written in Java 11 with Lanterna CLI as front-end
