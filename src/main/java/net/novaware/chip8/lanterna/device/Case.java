@@ -6,16 +6,6 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 
-/**
- * Computer Case a.k.a. Enclosure
- *
- * Contains:
- * Screen
- * Keyboard
- * Buzzer
- *
- * Tape is an attachment
- */
 public class Case {
 
     private Terminal terminal;

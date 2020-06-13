@@ -1,14 +1,13 @@
 package net.novaware.chip8.lanterna;
 
 import net.novaware.chip8.core.Board;
-import net.novaware.chip8.core.BoardConfig;
 import net.novaware.chip8.core.clock.ClockGeneratorJvmImpl;
+import net.novaware.chip8.core.config.MutableConfig;
 import net.novaware.chip8.core.port.DisplayPort;
 import net.novaware.chip8.lanterna.device.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Random;
 
@@ -38,10 +37,9 @@ public class Chip8 {
         Buzzer buzzer = new Buzzer(aCase.getTerminal());
         buzzer.init();
 
-        BoardConfig config = new BoardConfig();
+        MutableConfig config = new MutableConfig();
         DisplayPort.Mode mode = DisplayPort.Mode.MERGE_FRAME;
 
-        // TODO: create a ROM library with game profiles instead
         if (title.equals("INVADERS")) {
             mode = DisplayPort.Mode.FALLING_EDGE;
             config.setCpuFrequency(1500);
@@ -53,21 +51,14 @@ public class Chip8 {
         board.getDisplayPort(DisplayPort.Type.PRIMARY).connect(screen::draw);
         board.getDisplayPort(DisplayPort.Type.PRIMARY).setMode(mode);
         board.getAudioPort().connect(buzzer);
-        board.getStoragePort().attachSource(() -> {
-            try {
-                return tape.load();
-            } catch (IOException e) {
-                LOG.error("Unable to load tape:" + e);
-                return new byte[0];
-            }
-        });
+        board.getStoragePort().connect(tape::loadPacket);
 
         Keyboard k = new Keyboard();
         k.init(board.getKeyPort(), aCase.getTerminal());
 
-        board.initialize();
-        board.runOnScheduler(Integer.MAX_VALUE);
+        board.powerOn();
 
+        //Uncomment to see when window is changed (resized)
         /*
         Signal.handle(new Signal("WINCH"), sig -> {
             System.out.println("WINCH");

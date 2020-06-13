@@ -4,11 +4,10 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.TerminalScreen;
-import net.novaware.chip8.core.gpu.ViewPort;
 
 import java.io.IOException;
 
-import static net.novaware.chip8.core.port.DisplayPort.*;
+import static net.novaware.chip8.core.port.DisplayPort.Packet;
 
 /**
  * Display device
@@ -20,12 +19,6 @@ public class Screen {
     private TerminalScreen terminalScreen;
 
     private TextGraphics tg;
-
-    private ViewPort viewPort = new ViewPort();
-
-    private ViewPort.Bit bit = new ViewPort.Bit();
-
-    private ViewPort.Index idx = new ViewPort.Index();
 
     private int lowerBlockPos = 0;
 

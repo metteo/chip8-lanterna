@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# execute "./mvnw exec:exec@run" first and press Esc when the game loads (running through maven is glitchy)
+# execute "./mvnw exec:exec@run -Drom=<path to ROM>" first and press Esc when the game loads (running through maven is glitchy)
 # above execution creates a file under ./target/modulepath which is used to load modules
 
-DEBUG=-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:5005,suspend=y,server=y
+#DEBUG=-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:5005,suspend=y,server=y
 
 java @target/modulepath \
   -ea \
